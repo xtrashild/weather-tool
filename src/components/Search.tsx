@@ -25,7 +25,6 @@ export default function Search({ onSearch }: SearchProps) {
                 setCities(results);
                 setShowDropdown(true);
 
-                // Trigger weather search with first result
                 if (results.length > 0) {
                     onSearch(results[0].name);
                 }
@@ -49,35 +48,66 @@ export default function Search({ onSearch }: SearchProps) {
 
     return (
         <div className="container mx-auto p-4">
-            <div className="form-control w-full max-w-md mx-auto mb-8">
-                <label className="label">
-                    <span className="label-text">City</span>
-                </label>
-                <div className="dropdown w-full">
-                    <input
-                        type="text"
-                        placeholder="Enter city name..."
-                        className="input input-bordered w-full"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                    />
-                    {showDropdown && cities.length > 0 && (
-                        <ul className="dropdown-content menu bg-base-100 rounded-box z-10 w-full p-2 shadow">
-                            {cities.map((city, index) => (
-                                <li
-                                    key={index}
-                                    onMouseDown={(e) => {e.preventDefault; handleCitySelect(`${city.name}, ${city.country}`)}}
-                                    className="cursor-pointer"
-                                >
-                                    <a>
-                                        {city.name}, {city.country}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            </div>
+    <div className="form-control w-full max-w-md mx-auto mb-8">
+        <div className="dropdown w-full">
+            <label className="input input-bordered flex items-center gap-2">
+                <svg
+                    className="h-[1em] opacity-50"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <input
+                    type="text"
+                    placeholder="Search a city"
+                    className="grow"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                />
+                {inputValue && (
+                    <svg
+                        className="h-[1em] opacity-50 cursor-pointer"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        onClick={() => setInputValue('')}
+                    >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                )}
+            </label>
+            {showDropdown && cities.length > 0 && (
+                <ul className="dropdown-content menu bg-base-100 rounded-box z-10 w-full p-2 shadow mt-1">
+                    {cities.map((city, index) => (
+                        <li
+                            key={index}
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                handleCitySelect(`${city.name}, ${city.country}`);
+                            }}
+                            className="cursor-pointer"
+                        >
+                            <a>
+                                {city.name}, {city.country}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
+    </div>
+</div>
     );
 }
