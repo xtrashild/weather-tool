@@ -1,5 +1,5 @@
 import { debounce } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { searchCities } from '../services/weatherApi';
 
 interface City {
@@ -14,12 +14,18 @@ interface SearchProps {
 }
 
 export default function Search({ onSearch }: SearchProps) {
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState('London');
     const [cities, setCities] = useState<City[]>([]);
     const [showDropdown, setShowDropdown] = useState(false);
+    const isSelectingFromDropdown = useRef(false);
 
     useEffect(() => {
         const debouncedSearch = debounce(async () => {
+            if (isSelectingFromDropdown.current) {
+                isSelectingFromDropdown.current = false;
+                return;
+            }
+
             if (inputValue.length >= 3) {
                 const results = await searchCities(inputValue);
                 setCities(results);
@@ -41,16 +47,17 @@ export default function Search({ onSearch }: SearchProps) {
     }, [inputValue, onSearch]);
 
     const handleCitySelect = (cityName: string) => {
+        isSelectingFromDropdown.current = true;
         setInputValue(cityName);
         setShowDropdown(false);
         onSearch(cityName);
     };
 
     return (
-        <div className="container mx-auto p-4">
-    <div className="form-control w-full max-w-md mx-auto mb-8">
+        <div className="w-full pt-6 flex justify-center">
+    <div className="w-full max-w-lg px-4 mb-8">
         <div className="dropdown w-full">
-            <label className="input input-bordered flex items-center gap-2">
+            <label className="input input-bordered flex items-center gap-2 w-full">
                 <svg
                     className="h-[1em] opacity-50"
                     xmlns="http://www.w3.org/2000/svg"

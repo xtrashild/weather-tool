@@ -13,7 +13,7 @@ export default function Card({
         <div className="card bg-base-100 shadow-xl">
             <div className="card-body items-center text-center">
                 <h2 className="card-title text-3xl">{day}</h2>
-                <p className="text-s text-gray-300">{date}</p>
+                <p className="text-s text-gray-500">{date}</p>
                 <div className="text-6xl mb-2">{emoji}</div>
                 <div className="text-3xl w-full h-20 flex items-center justify-center text-center overflow-y-auto wrap-break-word whitespace-pre-wrap px-2">
                     {description}
